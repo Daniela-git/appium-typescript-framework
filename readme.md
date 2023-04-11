@@ -817,7 +817,7 @@ this `ci.yaml` file has all the instructions on how to run the test in the githu
 `runs-on`: Specify the machine where you want to run the pipeline 
 `steps`: Define the steps for the given Job, you can have multiple steps like: one to clone the repo, another to install dependencies, another one to set up environment variables, another to run the test... etc
 
-### Quick description on the steps
+### Quick description on some of  the steps
 
    > this one checkout the code from the repository, making the code available for the action
 
@@ -853,29 +853,36 @@ this `ci.yaml` file has all the instructions on how to run the test in the githu
 
 #### cy.yaml
 
-    name: CI
+    name: 'BrowserStack Test'
     on: [push, pull_request]
     jobs:
-      build:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v2
-            - uses: actions/setup-node@v1
-              with:
-                node-version: 18
-            - name: Install
-              run: npm install
-            - name: Test
-              env:
-			      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
-			      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-		      run: npm run wdio:bs:android
-            - uses: actions/upload-artifact@v1
-              if: failure()
-              with:
-                name: logs
-                path: logs
+	    ubuntu-job:
+		    name: 'BrowserStack Test on Ubuntu'
+		    runs-on: ubuntu-latest  # Can be self-hosted runner also
+		    steps:
+			    - name: 'BrowserStack Env Setup'  # Invokes the setup-env action
+			      uses: browserstack/github-actions/setup-env@master
+			      with:
+			        username: ${{ secrets.BROWSERSTACK_USERNAME }}
+			        access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+			    - name: 'BrowserStack Local Tunnel Setup'  # Invokes the setup-local action
+			      uses: browserstack/github-actions/setup-local@master
+			      with:
+			        local-testing: start
+			        local-identifier: random
+			    - name: 'Checkout the repository'
+			      uses: actions/checkout@v3
+			    - uses: actions/setup-node@v3
+			      with:
+			        node-version: 18
+			    - name: 'Installing dependencies'
+			      run: npm install
+			    - name: 'Running test on BrowserStack'  # Invokes the actual test script that would run on BrowserStack browsers
+			      run: npm run wdio:bs:android
+			    - name: 'BrowserStackLocal Stop'  # Terminating the BrowserStackLocal tunnel connection
+			      uses: browserstack/github-actions/setup-local@master
+			      with:
+			        local-testing: stop
 
  
 > Push the changes and in the actions tab see that it is running
