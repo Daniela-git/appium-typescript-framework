@@ -794,7 +794,92 @@ for more info access the quick start setup here: https://app-automate.browsersta
 > ` dotenv.config()`
 
 
+## Github Actions Integration
 
+> Create a new repository on github and push the changes there
+ ### Add secrets to github
+ - In your project, go to settings -> Secrets and variables -> Actions -> new repository secret
+ - Setup both variables there `BROWSERSTACK_USERNAME and BROWSERSTACK_ACCESS_KEY`
+ 
+ ### Creating the workflow
+ > More info here: https://webdriver.io/docs/githubactions/
 
+- Create a folder `.gihub/workflows` In there add a yam file: `ci.yaml`
+
+this `ci.yaml` file has all the instructions on how to run the test in the github pipeline conting to BrowserStack . Here is some explanation on the yaml parts:
+
+> You can read more here: https://docs.github.com/en/actions
+
+`name`: give it any name that describes what you are doing in the pipeline
+`on`: When to run the pipeline, there are different options. ex on push (Will run the pipeline each time you push some changes to the repository, no matter the branch) or on pull_request ( will run the pipeline when a PR is created )
+
+`jobs`: Here you define the jobs that you want to run, you can have one to build and deploy the app, another one to run the test... etc
+`runs-on`: Specify the machine where you want to run the pipeline 
+`steps`: Define the steps for the given Job, you can have multiple steps like: one to clone the repo, another to install dependencies, another one to set up environment variables, another to run the test... etc
+
+### Quick description on the steps
+
+   > this one checkout the code from the repository, making the code available for the action
+
+    - name: Checkout
+    - uses: actions/checkout@v2
+
+>This one setups node in the machine
+
+    - uses: actions/setup-node@v1 
+    - with: 
+    	  node-version: 18
+
+> This one install all the dependencies listed in the package.json file
+
+    - name: Install 
+      run: npm install
+
+> This one runs the test, here we specify the script from the package.json that we want to run and we setup the env variables for BrowserStack
+
+    - name: Test
+      env:
+	      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+	      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+      run: npm run wdio:bs:android
+
+> This one generate an artifact with the logs if the test fails, this to be able to see why it failed
+
+    - uses: actions/upload-artifact@v1 
+      if: failure() 
+      with: 
+	      name: logs 
+		  path: logs
+
+#### cy.yaml
+
+    name: CI
+    on: [push, pull_request]
+    jobs:
+      build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - uses: actions/setup-node@v1
+              with:
+                node-version: 18
+            - name: Install
+              run: npm install
+            - name: Test
+              env:
+			      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+			      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+		      run: npm run wdio:bs:android
+            - uses: actions/upload-artifact@v1
+              if: failure()
+              with:
+                name: logs
+                path: logs
 
  
+> Push the changes and in the actions tab see that it is running
+
+ 
+
+
