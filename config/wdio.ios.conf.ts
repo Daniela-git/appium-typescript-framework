@@ -6,7 +6,7 @@ export const config: Options.Testrunner = {
   ...sharedConfig,
   port: 4723,
   specs: [
-    '../test/specs/**/*.ts'
+    '../test/specs/ios/**/*.ts'
   ],
   capabilities: [
     {

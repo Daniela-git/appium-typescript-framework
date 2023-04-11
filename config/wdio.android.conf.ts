@@ -2,11 +2,12 @@ import { sharedConfig } from "./wdio.shared.conf.ts"
 import path from 'path'
 import type { Options } from '@wdio/types'
 
+
 export const config: Options.Testrunner = {
   ...sharedConfig,
   port: 4723,
   specs: [
-    '../test/specs/**/*.ts'
+    '../test/specs/android/**/*.ts'
   ],
   capabilities: [
     {
@@ -16,7 +17,9 @@ export const config: Options.Testrunner = {
       'appium:automationName': 'UIAutomator2',
       // 'appium:app': path.join(process.cwd(), './app/android/ApiDemos-debug.apk')
       'appium:app': path.join(process.cwd(), './app/android/ColorNoteNotepad.apk'),
-      'autoGrantPermissions': true,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      'appium:autoGrantPermissions': true,
     }
   ]
 }

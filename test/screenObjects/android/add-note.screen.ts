@@ -42,16 +42,16 @@ class AddNoteScreen {
     await expect(this.addNoteTxt).toBeDisplayed();
   }
 
-  public async addAndSaveNote(noteHeading: any, noteBody: any) {
+  public async addAndSaveNote(noteHeading: string, noteBody: string) {
     await this.addNoteTxt.click();
     await this.textOption.click();
     await expect(this.textEditing).toBeDisplayed();
 
     // add note title
-    await noteHeading.addValue(noteHeading);
+    await this.noteHeading.addValue(noteHeading);
 
     // add note body
-    await noteBody.addValue(noteBody);
+    await this.noteBody.addValue(noteBody);
 
     // save the changes
     await this.saveNote();

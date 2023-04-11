@@ -1,5 +1,6 @@
 
 # APPIUM ( With WebDriverIO )
+#### the example code of the first section is in this repository: https://github.com/cposada23/appium-webdriverio
 
 ## What is Appium 
 - Open source automation framework for native, hybrid and mobile web apps in Android, iOS and Windows apps
@@ -612,7 +613,7 @@ To install a new iOS version open Xcode and:
  
 
 # Framework
-Setting up some things for the framework
+Clone this repository for all the code: https://github.com/cposada23/appium-typescript-framework
 
 #### Recommended  folder structure
 - app // Here we put the different APK files 
@@ -683,10 +684,50 @@ tsconfig.json
 #### Setup a Linter
 > https://www.npmjs.com/package/eslint-plugin-wdio
 
-Create a file .eslintrc and paste the following:
+Create a file .eslintrc.cjs and paste the following:
 
-    {
-		"plugins": ["wdio"],
-		"extends": ["plugin:wdio/recommended", "eslint:recommend"]
-	}
-		
+    module.exports = {
+		extends: ["plugin:wdio/recommended", 'eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+		parser:  '@typescript-eslint/parser',
+		plugins: ['@typescript-eslint', 'wdio'],
+		root:  true,
+	};
+Install the dependencies: 
+> `npm i -D @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint eslint-plugin-wdio@latest`
+> See: https://typescript-eslint.io/getting-started/
+
+
+#### Shared configuration for Android and iOS
+
+- Create a new folder `config` that will contain all the configuration of wdio
+- Rename the file `wdio.conf.ts`to `wdio.shared.conf.ts`
+	- The part that says `export  const  config: Options.Testrunner = {` change it to `export  const  sharedConfig: Options.Testrunner = {`
+- Create two new files `wdio.android.conf.ts` and `wdio.ios.conf.js`
+- In those two files import the `wdio.shared.conf.ts` and add the specific capabilities and specs for the correct platform `Android or iOS` 
+- > See files in the repository for the code of these files 
+- Add new scripts to the package json 
+	- `"wdio:android": "wdio run ./config/wdio.android.conf.ts",`
+	- `"wdio:ios": "wdio run ./config/wdio.ios.conf.ts"`
+
+
+#### Implementing Hooks
+Wdio has different hooks that you can implement, this can reduce the amount of code on the specs and make sure that the tests have all that it needs to run successfully.
+- Before
+- After
+- Before Each
+- After Each
+
+
+## BrowserStack integration
+
+BrowserStack is a paid service but you can have a free trial, create an account here: https://www.browserstack.com/
+
+- Once you created the account, in the top look for `All Products -> App Automate`
+- 
+
+
+
+
+
+
+ 
