@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+      "allowImportingTsExtensions": true,
+      "noEmit": true,
+      "moduleResolution": "node",
+      "module": "ESNext",
+      "types": [
+          "node",
+          "@wdio/globals/types",
+          "expect-webdriverio",
+          "@wdio/mocha-framework",
+          "@wdio/appium-service"
+      ],
+      "target": "ES2015",
+      "esModuleInterop": true
+    },
+    "include": [
+      "**/*.ts"
+    ],
+    "exclude": ["node_modules"]
+}
