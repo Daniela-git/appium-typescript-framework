@@ -723,8 +723,75 @@ Wdio has different hooks that you can implement, this can reduce the amount of c
 BrowserStack is a paid service but you can have a free trial, create an account here: https://www.browserstack.com/
 
 - Once you created the account, in the top look for `All Products -> App Automate`
-- 
+- Upload the apps:
+	- Click Upload app
+	- select the app
+	- Copy the path that they give you, something  like this: `bs://b6f450d4c44f319d95d8c92849417b5956af81ea` This will be the application path in the config file for BrowserStack.
+- You'll need the access key for BrowserStack, so click on access keys and copy them somewhere, we will put this in an .env file that you should not upload to git 
+- Install BrowserStack service running `npm i @wdio/browserstack-service -D`
+	- > More info here: https://webdriver.io/docs/browserstack-service/
+- Create in the config folder another file to store the BrowserStack configuration: `wdio.android.bs.conf.ts`
+- Fill the capabilities according to the device name and os version
+- Add this line to the scripts in the package.json: `"wdio:bs:android": "wdio run ./config/wdio.android.bs.conf.ts"` and run the test to see if everything works fine: `npm run wdio:bs:android`
 
+> the wdio.android.bs.conf.ts should look something like this:
+for more info access the quick start setup here: https://app-automate.browserstack.com/dashboard/v2/quick-start/setup-browserstack-wdio-service
+
+    import { sharedConfig } from  "./wdio.shared.conf.ts"
+	import  type { Options } from  '@wdio/types'
+	
+	export  const  config: Options.Testrunner = {
+		...sharedConfig,
+		// BrowserStack Credential
+		user:  process.env.BROWSERSTACK_USERNAME,
+		key:  process.env.BROWSERSTACK_ACCESS_KEY,
+		hostname:  'hub.browserstack.com',
+		specs: [
+		    '../test/specs/android/**/*.ts'
+		],
+		services: [
+			[
+				'browserstack',
+				{
+					app:  'bs://b6f450d4c44f319d95d8c92849417b5956af81ea',
+					buildIdentifier:  "${BUILD_NUMBER}",
+					browserstackLocal:  true
+				},
+			]
+		],
+		capabilities: [
+			{
+				'bstack:options': {
+					deviceName:  'Samsung Galaxy S22 Ultra',
+					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+					// @ts-ignore
+					platformVersion:  '12.0',
+					platformName:  'android',
+				}
+			},
+		],
+		commonCapabilities: {
+			'bstack:options': {
+				projectName:  "BrowserStack Sample",
+				buildName:  "bstack-demo",
+				debug:  true,
+				networkLogs:  true
+			}
+		},
+		maxInstances:  10,
+	}
+
+
+> Don't forget to secure your browser stack credentials, for this create a .env file in the root folder ( Remember to add this file to the .gitignore ). Then install the dotenv npm package `npm i dotenv`
+
+#### .env file:
+
+    BROWSERSTACK_USERNAME=<replace with your username> 
+    BROWSERSTACK_ACCESS_KEY=<replace with your access key>
+
+> add this to the file that you need to load the env variables
+> `import  dotenv  from  'dotenv'`
+> ` dotenv.config()`
 
 
 

@@ -19,7 +19,7 @@ export const config: Options.Testrunner = {
       'appium:app': path.join(process.cwd(), './app/android/ColorNoteNotepad.apk'),
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      'appium:autoGrantPermissions': true,
+      // 'appium:autoGrantPermissions': true,
     }
   ]
 }
