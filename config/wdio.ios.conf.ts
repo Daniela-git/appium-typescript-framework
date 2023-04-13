@@ -6,17 +6,18 @@ export const config: Options.Testrunner = {
   ...sharedConfig,
   port: 4723,
   specs: [
-    '../test/specs/ios/**/*.ts'
+    // '../test/specs/ios/**/*.ts'
+    '../test/specs/ios/**/webView.spec.ts'
   ],
   capabilities: [
-    {
-      'appium:platformName': 'ios',
-      'appium:platformVersion': '14.5',
-      'appium:deviceName': 'iPhone11ios14',
-      'appium:automationName': 'XCUITest',
-      // 'appium:app': path.join(process.cwd(), 'app/android/ApiDemos-debug.apk')
-      'appium:app': path.join(process.cwd(), './app/ios/MVCTodo.app'),
-    }
+    // {
+    //   'appium:platformName': 'ios',
+    //   'appium:platformVersion': '14.5',
+    //   'appium:deviceName': 'iPhone11ios14',
+    //   'appium:automationName': 'XCUITest',
+    //   // 'appium:app': path.join(process.cwd(), 'app/android/ApiDemos-debug.apk')
+    //   'appium:app': path.join(process.cwd(), './app/ios/MVCTodo.app'),
+    // }
     // {
       //   'appium:platformName': 'ios',
       //   'appium:platformVersion': '16.4',
@@ -25,5 +26,14 @@ export const config: Options.Testrunner = {
       //   // 'appium:app': path.join(process.cwd(), 'app/android/ApiDemos-debug.apk')
       //   'appium:app': path.join(process.cwd(), 'app/ios/UIKitCatalog.app'),
     // }
+    {
+      'appium:platformName': 'ios',
+      'appium:platformVersion': '14.5',
+      'appium:deviceName': 'iPhone11ios14',
+      'appium:automationName': 'XCUITest',
+      // 'appium:app': path.join(process.cwd(), 'app/android/ApiDemos-debug.apk')
+      'appium:app': path.join(process.cwd(), './app/ios/wdioNativeDemoApp.app'),
+    }
+    
   ]
 }
