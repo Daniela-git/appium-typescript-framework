@@ -887,6 +887,66 @@ this `ci.yaml` file has all the instructions on how to run the test in the githu
  
 > Push the changes and in the actions tab see that it is running
 
- 
 
+## WebViews (Android)
+
+A webView is basically a view that displays web pages or web content ( when you click a link for example ). It can either be a webObject or open a webBrowser
+
+You'll need to configure the appium service to be able to use the chrome driver like this: in the wdio.andoid.conf.ts: 
+
+    services: [['appium', {
+	    args: {
+		    port:  4723,
+		    relaxedSecurity:  true
+	    }
+    }]]
+
+#### Accessing a webBrowser
+
+For this you use the switchContext method like this: `await  driver.switchContext('WEBVIEW_chrome')`
+
+#### Going back to the app
+`await driver.switchContext('NATIVE_APP')`
+`await driver.back()`
+ 
+ #### Accessing the Contexts in Appium Inspector
+> IMPORTANT: run Appium in the terminal like this: `appium -p 4724 --allow-cors --allow-insecure chromedriver_autodownload`
+-  Open the app in the Appium inspector, then in the top menu go to Commands and in the dropdown select Context
+- Then for the subGroup select Context again
+- Click `Get Current Context`  It will tell you the context that you are in
+- The `Get Context List` Will give you the list of contexts that are available 
+
+
+## WebViews (iOS)
+
+#### Accessing embedded WebView
+> For this example we are going to use the WebDriverIo example app, you can download it here https://github.com/webdriverio/native-demo-app/releases or take from the repository:
+
+Use the same function `driver.switchContext('<Context>')`
+Example:
+
+    it('Working with dynamic webview', async () => {
+	    await  $('~Webview').click();
+	    // wait until you get multiple context
+	    await  driver.waitUntil(async () => {
+		    const  contexts = await  driver.getContexts();
+		    return  contexts.length  >  1;}, { timeout:  30000, timeoutMsg:  'Timed out waiting for another context' 					 			});
+	    // get all the contexts
+	    const  contexts = await  driver.getContexts();
+	    // switch to the webview context
+	    await  driver.switchContext(typeof  contexts[1] === 'string'? contexts[1] : contexts[1].id);
+	    // assertion
+	    const  subtitleTxt = await  $('.hero__subtitle');
+	    await  expect(subtitleTxt).toHaveTextContaining('automation');
+	    // switch back to the native app
+	    await  driver.switchContext('NATIVE_APP');
+	    await  $('~Home').click()
+	    // assertion
+	    const  webdriverTxt = await  $('//*[@name="WEBDRIVER"]')
+	    await  expect(webdriverTxt).toBeDisplayed()
+    });
+
+> Note: one of the issues when switching context into a embedded WebView instead of a  WebBrowser, is that the context identifier change dynamically, so you can not hard code it. You have to get the contexts list and then access the context that you want `context[contextPosition]`
+
+> Note: In the code you'll see the use of wainUntil, this is a way to create a custom wait in WebdriverIO, by passing a function that return true or false. It will retry until the function returns true or trow an exception if  it reach the timeout.
 
