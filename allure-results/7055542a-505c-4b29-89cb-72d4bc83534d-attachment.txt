@@ -1,4 +1,0 @@
-{
-  "using": "xpath",
-  "value": "//*[@name=\"WEBDRIVER222222\"]"
-}
