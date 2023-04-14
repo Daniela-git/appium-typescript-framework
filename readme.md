@@ -851,38 +851,9 @@ this `ci.yaml` file has all the instructions on how to run the test in the githu
 	      name: logs 
 		  path: logs
 
-#### cy.yaml
+#### example.yaml
 
-    name: 'BrowserStack Test'
-    on: [push, pull_request]
-    jobs:
-	    ubuntu-job:
-		    name: 'BrowserStack Test on Ubuntu'
-		    runs-on: ubuntu-latest  # Can be self-hosted runner also
-		    steps:
-			    - name: 'BrowserStack Env Setup'  # Invokes the setup-env action
-			      uses: browserstack/github-actions/setup-env@master
-			      with:
-			        username: ${{ secrets.BROWSERSTACK_USERNAME }}
-			        access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-			    - name: 'BrowserStack Local Tunnel Setup'  # Invokes the setup-local action
-			      uses: browserstack/github-actions/setup-local@master
-			      with:
-			        local-testing: start
-			        local-identifier: random
-			    - name: 'Checkout the repository'
-			      uses: actions/checkout@v3
-			    - uses: actions/setup-node@v3
-			      with:
-			        node-version: 18
-			    - name: 'Installing dependencies'
-			      run: npm install
-			    - name: 'Running test on BrowserStack'  # Invokes the actual test script that would run on BrowserStack browsers
-			      run: npm run wdio:bs:android
-			    - name: 'BrowserStackLocal Stop'  # Terminating the BrowserStackLocal tunnel connection
-			      uses: browserstack/github-actions/setup-local@master
-			      with:
-			        local-testing: stop
+See the example yaml file here `.github/workflows/browserStack.yaml`
 
  
 > Push the changes and in the actions tab see that it is running
