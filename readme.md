@@ -950,3 +950,64 @@ Example:
 
 > Note: In the code you'll see the use of wainUntil, this is a way to create a custom wait in WebdriverIO, by passing a function that return true or false. It will retry until the function returns true or trow an exception if  it reach the timeout.
 
+
+## Allure Reporting
+> https://webdriver.io/docs/allure-reporter/
+
+Run `npm i @wdio/allure-reporter -D`
+
+In the `wdio.shared.conf.ts` file copßy the following:
+
+    reporters: ['spec', ['allure', {
+	    outputDir:  'allure-results',
+	    disableWebdriverStepsReporting:  false,
+	    disableWebdriverScreenshotsReporting:  false,
+    }]],
+
+
+Run one test, and see if the allure-results are generated in the folder ./allure-results/... To see the report you have to do the following:
+
+- Intall allure command line: `npm i allure-commandline`
+- Generate the report: `npx allure generate allure-results`
+- Open the report `npx allure open`
+
+> If you want to generate the allure report again after the first time, you'll need to run it like this: `npx allure generate allure-results --clean`
+
+#### Add screenshots to the report on failure:
+
+In wdio.shared.conf.ts add the following afterSpec hook:
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    afterTest:  async  function(test, context, { error, result, duration, passed, retries }) {
+	    if (error) {
+		    await  driver.takeScreenshot();
+	    }
+    },
+
+> Remember  to have these two set to false `	    disableWebdriverStepsReporting:  false, disableWebdriverScreenshotsReporting:  false,` in the allure reporter options
+
+You can see the screenshot in the step that failed...
+
+> You can take screenshots where you want by using `await driver.takeScreenshot()`
+
+#### Auto generating Allure Report
+Add or extend the onComplete Hook in `wdio.shared.conf.ts`:
+
+    onComplete:  function() {
+	    const  reportError = new  Error('Could not generate Allure report')
+	    const  generation = allure(['generate', 'allure-results', '--clean'])
+	    return  new  Promise<void>((resolve, reject) => {
+		    const  generationTimeout = setTimeout(
+		    () =>  reject(reportError),
+			    5000)
+			    generation.on('exit', function(exitCode) {
+			    clearTimeout(generationTimeout)
+			    if (exitCode !== 0) {
+				    return  reject(reportError)
+			    }
+			    console.log('Allure report successfully generated')
+			    resolve()
+		    })
+	    })
+    }
+
