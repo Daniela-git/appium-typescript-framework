@@ -1,1 +1,0 @@
-{"f69e0e4ac089877d7f14ef0729d33a18":{"statistic":{"failed":1,"broken":0,"skipped":0,"passed":0,"unknown":0,"total":1},"items":[{"uid":"73fb208116c36519","status":"failed","statusDetails":"Expect $(`//*[@name=\"WEBDRIVER222222\"]`) to be displayed\n\nExpected: \"displayed\"\nReceived: \"not displayed\"","time":{"start":1681496365148,"stop":1681496382480,"duration":17332}}]}}
