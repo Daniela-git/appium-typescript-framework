@@ -10,11 +10,11 @@
 - Windows: WinAppDriver
 
 ***What is  WebDriverIO***? is a Javascript automation framework, that lets you automate web apps in different browsers and OS. It also supports automation for mobile applications in iOS and Android. Is really easy to get started with it, you just need node js installed and run the following commands:
-
+```bash
     npm i -D @wdio/cli
     npx wdio config --yes
     npx wdio run
-   
+```
    
 
 ## Installing All the things
@@ -33,14 +33,14 @@
 > Use the LTS version of node
 
 Useful commands for nvm
-
+```bash
     // Install the lts version
     nvm install node
     // List all node version taht you have
     nvm list
     // Use a version of node
     nvm use <node version>
-
+```
 #### Install Java JDK
 > You can use this page to download the latests sdks: https://adoptium.net/
 > Follow this page for more details on how to setup java in mac: https://mkyong.com/java/how-to-set-java_home-environment-variable-on-mac-os-x/
@@ -89,6 +89,7 @@ Then in a terminal ( make sure you source the file ***source ~/.zshrc*** ) run t
 
 Install Appium drivers
 > appium driver install xcuitest
+
 > appium driver install uiautomator2
 
 check the drivers installation with ***appium driver list*** 
@@ -135,11 +136,11 @@ All configuration can be found here: ***wdio.conf.js***
 
 In the wdio.conf.js do the following 
 Add the import for the node module path: 
-
+```typescript
     const  path = require('path');
-
+```
 Look for the capabilities section and replace it with the following:
-
+```typescript
     capabilities: [{
 	    'appium:platformName':  'Android',
 	    'appium:platformVersion':  '12.0', // this is the version that you choose when creating the emulator
@@ -147,7 +148,7 @@ Look for the capabilities section and replace it with the following:
 	    'appium:automationName':  'UIAutomator2',
 	    'appium:app':  path.join(process.cwd(), 'app/android/ApiDemos-debug.apk') // This is the path to the APK File
     }],
-
+```
 
 # Common Assertions and Actions
 
@@ -193,12 +194,13 @@ Look for the capabilities section and replace it with the following:
 > Things to take in consideration: install Appium at project level and the drivers, same commands than in the Appium section but this time at project level ( in the root of the framework )
 
 Create a new sample spec to test that everything works correctly: ***test/specs/sample.js***  and paste the following:
-
+```typescript
     describe('Sample', () => {
 	    it('Sample test', async () => {
 		    await  driver.pause();
 	    });
     });
+```
 
 Run the sample test ( Remember to have the emulator open and running ) ***npx wdio***
 >If you get an error similar to this -
@@ -223,7 +225,7 @@ You can resolve that by making the following changes -
 2. in the Appium Inspector change the port to a different one from the one you use in the automation, change it to ***4724*** and click start server
 3. In the Appium inspector make sure that in the ***Remote Path*** you have ***/wb/hub/*** and in the port the port that you set up in the previous step for the Appium server In my case: ***4724***
 4. In the Appium Inspector you need to add the capabilities to connect to the emulator: 
-
+```json
     {
 	     "platformName": "Android",
 	     "appium:platformVersion": "< Replace with the android version that you chose when creating the emulator >",
@@ -231,7 +233,7 @@ You can resolve that by making the following changes -
 	     "appium:automationName": "UiAutomator2",
 	     "appium:app": "< Replace with the full path to the APK that you are using >"
     }
-
+```
 5. Click Start Session. you should see in the Appium inspector the application that is running in the emulator. There you can inspect the elements to get the proper id to interact with them in the automation.
 
 
@@ -254,7 +256,7 @@ You can fin elements by different types of attributes
 To find an element by accessibility id you use the **~** symbol
 
 > Example code: finding an element, then click on it and then assert that an element is visible
-
+```typescript
     describe('Android ELements Tests', () => {
 	    it('Find element by accessibility id', async () => {
 		    // Find element by accessibility id
@@ -266,17 +268,17 @@ To find an element by accessibility id you use the **~** symbol
 		    await  expect(actionBar).toBeExisting();
 	    });
     });
-
+```
 #### Finding and interacting with elements by class Name
-
+```typescript
     it.only('Find element by class Name', async () => {
 	    const  className = await  $('android.widget.TextView');
 	    console.log(className);
 	    await  expect(className).toHaveText("API Demos")
     });
-
+```
 #### Finding and interacting with elements by X-Path
-
+```typescript
     it('Find elements by Xpath', async () => {
 	    // xpath - (//tagname[@attribute=value])
 	    await  $('//android.widget.TextView[@content-desc="Alert Dialogs"]').click();
@@ -289,7 +291,7 @@ To find an element by accessibility id you use the **~** symbol
 	    const  textAssertion = await  $('//android.widget.TextView');
 	    await  expect(textAssertion).toHaveText("You selected: 1 , Command two");
     });
-
+```
 #### Finding Elements with UiAutomator
 
 More info Here:
@@ -297,17 +299,17 @@ More info Here:
 - https://developer.android.com/reference/androidx/test/uiautomator/UiSelector
 - https://appium.io/docs/en/writing-running-appium/android/uiautomator-uiselector/
 
-
+```typescript
     it('Find elements by UIAutomator', async () => {
         // find by text contains
         await $('android=new UiSelector().textContains("Alert")').click();
     });
-
+```
 #### Finding multiple elements
 
 
 you use $ to find single element and $$ to find multiple elements
-
+```typescript
     it('Find multiple elements', async () => {
         const  expectedList = [
 		    'API Demos', "Access'ibility",
@@ -328,9 +330,9 @@ you use $ to find single element and $$ to find multiple elements
 	    // assert the list
 	    await  expect(actualList).toEqual(expectedList);
     });
-
+```
 #### Working with text fields
-
+```typescript
     it.only('Working with text field', async () => {
 	    // access the auto complete screen
 	    await  $('~Views').click();
@@ -342,7 +344,7 @@ you use $ to find single element and $$ to find multiple elements
 	    // verify the country name
 	    await  expect(textField).toHaveText('Canada');
     });
-
+```
 ## App Package and app Activity
 - appPackage: technical name of the app, provided by the developers (Top level package under which the app code resides) . Ex: 'com.google.android.youtube'
 - appActivity: Certain screen or functionality of the application. EX: MainActivity, AlertDialog
@@ -358,7 +360,7 @@ you use $ to find single element and $$ to find multiple elements
 	- I need also the package name combined with the activity name to be able to access that screen. To get the package name, close the popup that was opened in the previous step, and click in the button that says ***current package***. In this example the package is: " ***io.appium.android.apis*** " 
 
 Example code:
-
+```typescript
     it.only('Access an Activity directly', async () => {
 	    // access activity
 	    await  driver.startActivity("io.appium.android.apis", "io.appium.android.apis.app.AlertDialogSamples");
@@ -367,7 +369,7 @@ Example code:
 	    // assertion
 	    await  expect($('//*[@text="App/Alert Dialogs"]')).toExist();
     });
-
+```
 ## Scrolling (Android)
 
 We can make use of `UiAutomator` driver to do this kind of actions
@@ -378,14 +380,21 @@ We can make use of `UiAutomator` driver to do this kind of actions
 
 #### Scroll to end
 Scrolls to the end of a scrollable layout element. The end can be at the bottom-most edge in the case of vertical controls, or the right-most edge for horizontal controls
-
->  `await $('android=new UiScrollable(new UiSelector().scrollable(true)).scrollToEnd(1,5)');`
-
+```typescript
+await $(`android=new UiScrollable(
+		new UiSelector().scrollable(true)
+	).scrollToEnd(1,5)`
+);
+```
 
 #### Scroll text in into view
 Performs a forward scroll action on the scrollable layout element until the text you provided is visible, or until swipe attempts have been exhausted 
-> `await  $('android=new UiScrollable(new UiSelector().scrollable(true)).scrollTextIntoView("Secure Surfaces")')`
-
+```typescript
+await  $(`android=new UiScrollable(
+			new UiSelector().scrollable(true)
+		).scrollTextIntoView("Secure Surfaces")`
+);
+```
 #### Horizontal Scroll
 You use the `.setAsHorizontalList()` method
 > Horizontal Scrolling `await  $('android=new UiScrollable(new UiSelector().scrollable(true)).setAsHorizontalList().scrollForward()');`
@@ -402,7 +411,7 @@ With the App from the repo, do the following
 - Assert the date is updated
 
 Solution:
-
+```typescript
     it.only('Scrolling in date pickers', async () => {
 	    const  currentActivity = '.view.DateWidgets1';
 	    const  currentPackage = 'io.appium.android.apis';
@@ -424,7 +433,7 @@ Solution:
 	    console.log(`Updated Date: ${updatedDate}`);
 	    await  expect(updatedDate).not.toEqual(currentDate);
     });
-
+```
 ## Handle Permissions 
 
 Sometimes the app needs some permissions to access some of the devices functionality, like the camera or access to the gallery... This is one way to handle those.  ( To follow this change the APK to: ` 'appium:app':  path.join(process.cwd(), 'app/android/ColorNote+Notepad.apk') ` in the ***wdio.conf.js*** )
@@ -438,29 +447,29 @@ Page object is a design patter that creates an object repository to store all th
 In this case the page object is a simple class where we save all the elements of a page 
 
 Ex: Edit Note Page 
+```typescript
+class  EditNoteScreen {
+	get  firstNote() {
+		return  $('//*[@resource-id="com.socialnmobile.dictapps.notepad.color.note:id/title"]');
+	}
+	get  moreIcon() {
+		return  $('~More');
+	}
 
-    class  EditNoteScreen {
-	    get  firstNote() {
-		    return  $('//*[@resource-id="com.socialnmobile.dictapps.notepad.color.note:id/title"]');
-	    }
-	    get  moreIcon() {
-		    return  $('~More');
-	    }
-	    
-	    get  deleteIcon() {
-		    return  $('//*[@text="Delete"]');
-	    }
-	    
-	    get  navIcon() {
-		    return  $('//*[@resource-id="com.socialnmobile.dictapps.notepad.color.note:id/icon_nav"]');
-	    }
-	    
-	    get  trashCanItem() {
-		    return  $('//*[@text="Trash Can"]');
-	    }
-    }
-    module.exports = new  EditNoteScreen();
+	get  deleteIcon() {
+		return  $('//*[@text="Delete"]');
+	}
 
+	get  navIcon() {
+		return  $('//*[@resource-id="com.socialnmobile.dictapps.notepad.color.note:id/icon_nav"]');
+	}
+
+	get  trashCanItem() {
+		return  $('//*[@text="Trash Can"]');
+	}
+}
+module.exports = new  EditNoteScreen();
+```
 
 
 # iOS 
@@ -481,7 +490,7 @@ Ex: Edit Note Page
 
 **Setup the capabilities in `wdio.conf.js`**
 > To check the iOS version that you want to use, open xcode -> window -> devices and simulators. Pick the version of the simulator/device you want to use
-```
+```json
 {
   "platformName": "ios",
   "appium:platformVersion": "<ReplaceWithiOSVersion>",
@@ -514,56 +523,57 @@ You can find the elements using the selectors listed below:
 	- `type == 'XCUIElementTypeButton' AND value BEGINSWITH[c] 'bla' AND visible == 1`
 
 #### Finding and interacting with elements by Accessibility id
-
-    it('find element by accessibility id', async () => {
-	    await  $('~Alert Views').click();
-	    await  $('~Simple').click();
-	    await  expect(await  driver.getAlertText()).toContain("A Short Title Is Best");
-    });
-
+```typescript
+it('find element by accessibility id', async () => {
+	await  $('~Alert Views').click();
+	await  $('~Simple').click();
+	await  expect(await  driver.getAlertText())
+				.toContain("A Short Title Is Best");
+});
+```
 #### Finding and interacting with elements by tag Name
-
-    it('find by tag name', async () => {
-	    // single element
-	    console.log(await  $('XCUIElementTypeStaticText').getText());
-	    // multiple elements
-	    const  textEls = await  $$('XCUIElementTypeStaticText');
-	    for (const  element  of  textEls) {
-		    console.log(await  element.getText());
-	    }
-    });
-
+```typescript
+it('find by tag name', async () => {
+	// single element
+	console.log(await  $('XCUIElementTypeStaticText').getText());
+	// multiple elements
+	const  textEls = await  $$('XCUIElementTypeStaticText');
+	for (const  element  of  textEls) {
+		console.log(await  element.getText());
+	}
+});
+```
 #### Finding and interacting with elements by xpath
-
-    it('find element by xpath', async () => {
-	    // xpath - (//tagname[@attribute=value])
-	    // await $('//XCUIElementTypeStaticText[@name="Alert Views"]').click();
-	    // await $('//XCUIElementTypeStaticText[@label="Simple"]').click();
-	    await  $('//*[@name="Alert Views"]').click();
-	    await  $('//*[@label="Simple"]').click();
-	    await  expect(await  driver.getAlertText()).toContain("A Short Title Is Best");
-    });
-
+```typescript
+it('find element by xpath', async () => {
+	// xpath - (//tagname[@attribute=value])
+	// await $('//XCUIElementTypeStaticText[@name="Alert Views"]').click();
+	// await $('//XCUIElementTypeStaticText[@label="Simple"]').click();
+	await  $('//*[@name="Alert Views"]').click();
+	await  $('//*[@label="Simple"]').click();
+	await  expect(await  driver.getAlertText()).toContain("A Short Title Is Best");
+});
+```
 #### Finding and interacting with elements by class chain
-
-    it('find element by class chain', async () => {
-	    // const alertText = '**/XCUIElementTypeStaticText[`label == "Alert Views"`]';
-	    const  alertText = '**/XCUIElementTypeStaticText[`label CONTAINS "Alert"`]';
-	    await  $(`-ios class chain:${alertText}`).click();
-	    await  $('//*[@label="Simple"]').click();
-	    await  expect(await  driver.getAlertText()).toContain("A Short Title Is Best");
-    });
-
+```typescript
+it('find element by class chain', async () => {
+	// const alertText = '**/XCUIElementTypeStaticText[`label == "Alert Views"`]';
+	const  alertText = '**/XCUIElementTypeStaticText[`label CONTAINS "Alert"`]';
+	await  $(`-ios class chain:${alertText}`).click();
+	await  $('//*[@label="Simple"]').click();
+	await  expect(await  driver.getAlertText()).toContain("A Short Title Is Best");
+});
+```
 #### Finding and interacting with elements by predicate string
-
-    it('find element by predicate string', async () => {
-		// const alertText = 'label == "Alert Views"';
-		const  alertText = 'value BEGINSWITH[c] "alert"';
-		await  $(`-ios predicate string:${alertText}`).click();
-		await  $('//*[@label="Simple"]').click();
-		await  expect(await  driver.getAlertText()).toContain("A Short Title Is Best");
-	});
-
+```typescript
+it('find element by predicate string', async () => {
+	// const alertText = 'label == "Alert Views"';
+	const  alertText = 'value BEGINSWITH[c] "alert"';
+	await  $(`-ios predicate string:${alertText}`).click();
+	await  $('//*[@label="Simple"]').click();
+	await  expect(await  driver.getAlertText()).toContain("A Short Title Is Best");
+});
+```
 #### Exercise  (Using the example app)
 1. Access the default search bar in : search -> default -> default search bar
 2. Enter some text
@@ -572,15 +582,16 @@ You can find the elements using the selectors listed below:
 5. Verify the input is empty
 
 Solution
-
-    it('Exercise: Enter text in the search field', async () => {
-	    await  $('~Search').click(); // Click search in the home menu
-	    await  $('~Default').click(); // Click default in the following menu
-	    await  $('//XCUIElementTypeSearchField').addValue("I love this course!"); fill the input
-	    await  expect($('//XCUIElementTypeSearchField')).toHaveAttr("value"); assert the input has a value
-	    await  $('~Clear text').click(); click the x button
-	    await  expect($('//XCUIElementTypeSearchField')).not.toHaveAttr("value"); // Validate the input is empty
-    });
+```typescript
+it('Exercise: Enter text in the search field', async () => {
+	await  $('~Search').click(); // Click search in the home menu
+	await  $('~Default').click(); // Click default in the following menu
+	await  $('//XCUIElementTypeSearchField').addValue("I love this course!"); fill the input
+	await  expect($('//XCUIElementTypeSearchField')).toHaveAttr("value"); assert the input has a value
+	await  $('~Clear text').click(); click the x button
+	await  expect($('//XCUIElementTypeSearchField')).not.toHaveAttr("value"); // Validate the input is empty
+});
+```
 
 #### Working with alerts
 The same as Android alerts 
@@ -588,17 +599,22 @@ The same as Android alerts
 - await driver.dismissAlert()
 
 #### Working with Scrollable elements
-   
-	// Execute scroll on the screen
-	await  driver.execute('mobile: scroll', {direction:  "down" });
-	
-    // Get the element you want to scroll
-    const  redPicker = await  $('~Red color component value');
-	// Scroll the element down
-    await  driver.execute('mobile: scroll', { element:  redPicker.elementId, direction:  "down" });
-    // Scroll the element up
-    await  driver.execute('mobile: scroll', { element:  redPicker.elementId, direction:  "up" });
-
+ ```typescript
+// Execute scroll on the screen
+await  driver.execute('mobile: scroll', {direction:  "down" });
+// Get the element you want to scroll
+const  redPicker = await  $('~Red color component value');
+// Scroll the element down
+await  driver.execute(
+	'mobile: scroll', 
+	{ element:  redPicker.elementId, direction:  "down" }
+);
+// Scroll the element up
+await  driver.execute(
+	'mobile: scroll', 
+	{ element:  redPicker.elementId, direction:  "up" }
+);
+``` 
 
 #### Installing a different version of iOS
 > Sometimes you'll need an specific version of iOS, in the example app: MVCTodo.app we will need iOS 14.5 installed so we can run the test
@@ -627,7 +643,7 @@ Clone this repository for all the code: https://github.com/cposada23/appium-type
 #### AutoCompletion ( Skip this if you want to use typescript): 
 
 > In vs-code editor create a jsconfig.json
-
+```json
      {
 	    "compilerOptions": {
 		    "types": [
@@ -639,7 +655,7 @@ Clone this repository for all the code: https://github.com/cposada23/appium-type
 	    },
 	    "exclude": ["node_modules"]
     }
-
+```
 
 > More info here: https://webdriver.io/docs/autocompletion/
 
@@ -657,7 +673,7 @@ Clone this repository for all the code: https://github.com/cposada23/appium-type
 4. Rename all js files to .ts
 
 tsconfig.json
-
+```json
     {
 	    "compilerOptions": {
 	    "allowImportingTsExtensions": true,
@@ -679,19 +695,20 @@ tsconfig.json
 	    ],
 	    "exclude": ["node_modules"]
     }
-
+```
 
 #### Setup a Linter
 > https://www.npmjs.com/package/eslint-plugin-wdio
 
 Create a file .eslintrc.cjs and paste the following:
-
+```typescript
     module.exports = {
 		extends: ["plugin:wdio/recommended", 'eslint:recommended', 'plugin:@typescript-eslint/recommended'],
 		parser:  '@typescript-eslint/parser',
 		plugins: ['@typescript-eslint', 'wdio'],
 		root:  true,
 	};
+```
 Install the dependencies: 
 > `npm i -D @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint eslint-plugin-wdio@latest`
 > See: https://typescript-eslint.io/getting-started/
@@ -736,7 +753,7 @@ BrowserStack is a paid service but you can have a free trial, create an account 
 
 > the wdio.android.bs.conf.ts should look something like this:
 for more info access the quick start setup here: https://app-automate.browserstack.com/dashboard/v2/quick-start/setup-browserstack-wdio-service
-
+```typescript
     import { sharedConfig } from  "./wdio.shared.conf.ts"
 	import  type { Options } from  '@wdio/types'
 	
@@ -781,18 +798,19 @@ for more info access the quick start setup here: https://app-automate.browsersta
 		maxInstances:  10,
 	}
 
-
+```
 > Don't forget to secure your browser stack credentials, for this create a .env file in the root folder ( Remember to add this file to the .gitignore ). Then install the dotenv npm package `npm i dotenv`
 
 #### .env file:
-
-    BROWSERSTACK_USERNAME=<replace with your username> 
-    BROWSERSTACK_ACCESS_KEY=<replace with your access key>
-
+```properties
+BROWSERSTACK_USERNAME=<replace with your username> 
+BROWSERSTACK_ACCESS_KEY=<replace with your access key>
+```
 > add this to the file that you need to load the env variables
-> `import  dotenv  from  'dotenv'`
-> ` dotenv.config()`
-
+```typescript
+import  dotenv  from  'dotenv'
+dotenv.config()
+```
 
 ## Github Actions Integration
 
@@ -820,41 +838,70 @@ this `ci.yaml` file has all the instructions on how to run the test in the githu
 ### Quick description on some of  the steps
 
    > this one checkout the code from the repository, making the code available for the action
-
+```yaml
     - name: Checkout
     - uses: actions/checkout@v2
-
+```
 >This one setups node in the machine
-
+```yaml
     - uses: actions/setup-node@v1 
     - with: 
     	  node-version: 18
-
+```
 > This one install all the dependencies listed in the package.json file
-
+```yaml
     - name: Install 
       run: npm install
-
+```
 > This one runs the test, here we specify the script from the package.json that we want to run and we setup the env variables for BrowserStack
-
+```yaml
     - name: Test
       env:
 	      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
 	      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
       run: npm run wdio:bs:android
-
+```
 > This one generate an artifact with the logs if the test fails, this to be able to see why it failed
-
+```yaml
     - uses: actions/upload-artifact@v1 
       if: failure() 
       with: 
 	      name: logs 
 		  path: logs
-
-#### example.yaml
-
-See the example yaml file here `.github/workflows/browserStack.yaml`
-
+```
+#### cy.yaml
+```yaml
+    name: 'BrowserStack Test'
+    on: [push, pull_request]
+    jobs:
+	    ubuntu-job:
+		    name: 'BrowserStack Test on Ubuntu'
+		    runs-on: ubuntu-latest  # Can be self-hosted runner also
+		    steps:
+			    - name: 'BrowserStack Env Setup'  # Invokes the setup-env action
+			      uses: browserstack/github-actions/setup-env@master
+			      with:
+			        username: ${{ secrets.BROWSERSTACK_USERNAME }}
+			        access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+			    - name: 'BrowserStack Local Tunnel Setup'  # Invokes the setup-local action
+			      uses: browserstack/github-actions/setup-local@master
+			      with:
+			        local-testing: start
+			        local-identifier: random
+			    - name: 'Checkout the repository'
+			      uses: actions/checkout@v3
+			    - uses: actions/setup-node@v3
+			      with:
+			        node-version: 18
+			    - name: 'Installing dependencies'
+			      run: npm install
+			    - name: 'Running test on BrowserStack'  # Invokes the actual test script that would run on BrowserStack browsers
+			      run: npm run wdio:bs:android
+			    - name: 'BrowserStackLocal Stop'  # Terminating the BrowserStackLocal tunnel connection
+			      uses: browserstack/github-actions/setup-local@master
+			      with:
+			        local-testing: stop
+```
  
 > Push the changes and in the actions tab see that it is running
 
@@ -864,22 +911,23 @@ See the example yaml file here `.github/workflows/browserStack.yaml`
 A webView is basically a view that displays web pages or web content ( when you click a link for example ). It can either be a webObject or open a webBrowser
 
 You'll need to configure the appium service to be able to use the chrome driver like this: in the wdio.andoid.conf.ts: 
-
+```typescript
     services: [['appium', {
 	    args: {
 		    port:  4723,
 		    relaxedSecurity:  true
 	    }
     }]]
-
+```
 #### Accessing a webBrowser
 
 For this you use the switchContext method like this: `await  driver.switchContext('WEBVIEW_chrome')`
 
 #### Going back to the app
-`await driver.switchContext('NATIVE_APP')`
-`await driver.back()`
- 
+```typescript
+await driver.switchContext('NATIVE_APP')
+await driver.back()
+```
  #### Accessing the Contexts in Appium Inspector
 > IMPORTANT: run Appium in the terminal like this: `appium -p 4724 --allow-cors --allow-insecure chromedriver_autodownload`
 -  Open the app in the Appium inspector, then in the top menu go to Commands and in the dropdown select Context
@@ -895,17 +943,24 @@ For this you use the switchContext method like this: `await  driver.switchContex
 
 Use the same function `driver.switchContext('<Context>')`
 Example:
-
+```typescript
     it('Working with dynamic webview', async () => {
 	    await  $('~Webview').click();
 	    // wait until you get multiple context
 	    await  driver.waitUntil(async () => {
 		    const  contexts = await  driver.getContexts();
-		    return  contexts.length  >  1;}, { timeout:  30000, timeoutMsg:  'Timed out waiting for another context' 					 			});
+		    return  contexts.length  >  1;
+	    },
+	    { 
+		    timeout:  30000, 
+		    timeoutMsg:  'Timed out waiting for another context'
+		});
 	    // get all the contexts
 	    const  contexts = await  driver.getContexts();
 	    // switch to the webview context
-	    await  driver.switchContext(typeof  contexts[1] === 'string'? contexts[1] : contexts[1].id);
+	    await  driver.switchContext(
+		    typeof  contexts[1] === 'string'? contexts[1] : contexts[1].id
+	    );
 	    // assertion
 	    const  subtitleTxt = await  $('.hero__subtitle');
 	    await  expect(subtitleTxt).toHaveTextContaining('automation');
@@ -916,7 +971,7 @@ Example:
 	    const  webdriverTxt = await  $('//*[@name="WEBDRIVER"]')
 	    await  expect(webdriverTxt).toBeDisplayed()
     });
-
+```
 > Note: one of the issues when switching context into a embedded WebView instead of a  WebBrowser, is that the context identifier change dynamically, so you can not hard code it. You have to get the contexts list and then access the context that you want `context[contextPosition]`
 
 > Note: In the code you'll see the use of wainUntil, this is a way to create a custom wait in WebdriverIO, by passing a function that return true or false. It will retry until the function returns true or trow an exception if  it reach the timeout.
@@ -928,14 +983,14 @@ Example:
 Run `npm i @wdio/allure-reporter -D`
 
 In the `wdio.shared.conf.ts` file copßy the following:
-
+```typescript
     reporters: ['spec', ['allure', {
 	    outputDir:  'allure-results',
 	    disableWebdriverStepsReporting:  false,
 	    disableWebdriverScreenshotsReporting:  false,
     }]],
 
-
+```
 Run one test, and see if the allure-results are generated in the folder ./allure-results/... To see the report you have to do the following:
 
 - Intall allure command line: `npm i allure-commandline`
@@ -947,14 +1002,16 @@ Run one test, and see if the allure-results are generated in the folder ./allure
 #### Add screenshots to the report on failure:
 
 In wdio.shared.conf.ts add the following afterSpec hook:
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    afterTest:  async  function(test, context, { error, result, duration, passed, retries }) {
-	    if (error) {
-		    await  driver.takeScreenshot();
-	    }
-    },
-
+```typescript
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+afterTest:  async  function(
+	test, context, { error, result, duration, passed, retries }
+) {
+	if (error) {
+		await  driver.takeScreenshot();
+	}
+},
+```
 > Remember  to have these two set to false `	    disableWebdriverStepsReporting:  false, disableWebdriverScreenshotsReporting:  false,` in the allure reporter options
 
 You can see the screenshot in the step that failed...
@@ -963,22 +1020,22 @@ You can see the screenshot in the step that failed...
 
 #### Auto generating Allure Report
 Add or extend the onComplete Hook in `wdio.shared.conf.ts`:
-
-    onComplete:  function() {
-	    const  reportError = new  Error('Could not generate Allure report')
-	    const  generation = allure(['generate', 'allure-results', '--clean'])
-	    return  new  Promise<void>((resolve, reject) => {
-		    const  generationTimeout = setTimeout(
-		    () =>  reject(reportError),
-			    5000)
-			    generation.on('exit', function(exitCode) {
-			    clearTimeout(generationTimeout)
-			    if (exitCode !== 0) {
-				    return  reject(reportError)
-			    }
-			    console.log('Allure report successfully generated')
-			    resolve()
-		    })
-	    })
-    }
-
+```typescript
+onComplete:  function() {
+	const  reportError = new  Error('Could not generate Allure report')
+	const  generation = allure(['generate', 'allure-results', '--clean'])
+	return  new  Promise<void>((resolve, reject) => {
+		const  generationTimeout = setTimeout(
+			() =>  reject(reportError),5000
+		)
+		generation.on('exit', function(exitCode) {
+			clearTimeout(generationTimeout)
+			if (exitCode !== 0) {
+				return  reject(reportError)
+			}
+			console.log('Allure report successfully generated')
+			resolve()
+		})
+	})
+}
+```
