@@ -846,7 +846,7 @@ this `ci.yaml` file has all the instructions on how to run the test in the githu
 ```yaml
     - uses: actions/setup-node@v1 
     - with: 
-    	  node-version: 18
+        node-version: 18
 ```
 > This one install all the dependencies listed in the package.json file
 ```yaml
@@ -857,8 +857,8 @@ this `ci.yaml` file has all the instructions on how to run the test in the githu
 ```yaml
     - name: Test
       env:
-	      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
-	      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+        BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+        BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
       run: npm run wdio:bs:android
 ```
 > This one generate an artifact with the logs if the test fails, this to be able to see why it failed
@@ -866,41 +866,42 @@ this `ci.yaml` file has all the instructions on how to run the test in the githu
     - uses: actions/upload-artifact@v1 
       if: failure() 
       with: 
-	      name: logs 
-		  path: logs
+      	name: logs 
+  	path: logs
 ```
-#### cy.yaml
+#### browserStack.yaml
 ```yaml
-    name: 'BrowserStack Test'
-    on: [push, pull_request]
-    jobs:
-	    ubuntu-job:
-		    name: 'BrowserStack Test on Ubuntu'
-		    runs-on: ubuntu-latest  # Can be self-hosted runner also
-		    steps:
-			    - name: 'BrowserStack Env Setup'  # Invokes the setup-env action
-			      uses: browserstack/github-actions/setup-env@master
-			      with:
-			        username: ${{ secrets.BROWSERSTACK_USERNAME }}
-			        access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-			    - name: 'BrowserStack Local Tunnel Setup'  # Invokes the setup-local action
-			      uses: browserstack/github-actions/setup-local@master
-			      with:
-			        local-testing: start
-			        local-identifier: random
-			    - name: 'Checkout the repository'
-			      uses: actions/checkout@v3
-			    - uses: actions/setup-node@v3
-			      with:
-			        node-version: 18
-			    - name: 'Installing dependencies'
-			      run: npm install
-			    - name: 'Running test on BrowserStack'  # Invokes the actual test script that would run on BrowserStack browsers
-			      run: npm run wdio:bs:android
-			    - name: 'BrowserStackLocal Stop'  # Terminating the BrowserStackLocal tunnel connection
-			      uses: browserstack/github-actions/setup-local@master
-			      with:
-			        local-testing: stop
+name: 'BrowserStack Test'
+on: [pull_request]
+jobs:
+  ubuntu-job:
+    name: 'BrowserStack Test on Ubuntu'
+    runs-on: ubuntu-latest  # Can be self-hosted runner also
+    steps:
+      - name: 'BrowserStack Env Setup'  # Invokes the setup-env action
+        uses: browserstack/github-actions/setup-env@master
+        with:
+          username:  ${{ secrets.BROWSERSTACK_USERNAME }}
+          access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+      - name: 'BrowserStack Local Tunnel Setup'  # Invokes the setup-local action
+        uses: browserstack/github-actions/setup-local@master
+        with:
+          local-testing: start
+          local-identifier: random
+      - name: 'Checkout the repository'
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: 'Installing dependencies'
+        run: npm install
+      - name: 'Running test on BrowserStack'  # Invokes the actual test script that would run on BrowserStack browsers
+        run: npm run wdio:bs:android
+      - name: 'BrowserStackLocal Stop'  # Terminating the BrowserStackLocal tunnel connection
+        uses: browserstack/github-actions/setup-local@master
+        with:
+          local-testing: stop
+
 ```
  
 > Push the changes and in the actions tab see that it is running
