@@ -1,32 +1,30 @@
-import { sharedConfig } from "./wdio.shared.conf.ts"
-import path from 'path'
-import type { Options } from '@wdio/types'
-
+import { sharedConfig } from './wdio.shared.conf.ts';
+import path from 'path';
+import type { Options } from '@wdio/types';
 
 export const config: Options.Testrunner = {
   ...sharedConfig,
   port: 4723,
+  path: '/wd/hub',
   specs: [
     // '../test/specs/android/**/*.ts'
-    '../test/specs/android/**/webBrowser.spec.ts'
+    '../test/specs/android/delete-note-screenObjects.spec.ts',
   ],
-  services: [['appium', {
-    args: {
-      port: 4723,
-      relaxedSecurity: true
-    }
-  }]],
+  services: [],
   capabilities: [
     {
       'appium:platformName': 'Android',
-      'appium:platformVersion': '11.0',
-      'appium:deviceName': 'Pixel 4 API 30',
+      'appium:platformVersion': '13.0',
+      'appium:deviceName': 'emulator',
       'appium:automationName': 'UIAutomator2',
       // 'appium:app': path.join(process.cwd(), './app/android/ApiDemos-debug.apk')
-      'appium:app': path.join(process.cwd(), './app/android/ColorNoteNotepad.apk'),
+      'appium:app': path.join(
+        process.cwd(),
+        './app/android/ColorNoteNotepad.apk'
+      ),
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       'appium:autoGrantPermissions': true,
-    }
-  ]
-}
+    },
+  ],
+};

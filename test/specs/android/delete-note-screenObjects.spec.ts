@@ -1,12 +1,15 @@
-import AddNoteScreen from "../../screenObjects/android/add-note.screen.ts";
-import editNoteScreen from "../../screenObjects/android/edit-note.screen.ts";
+import AddNoteScreen from '../../screenObjects/android/add-note.screen.ts';
+import editNoteScreen from '../../screenObjects/android/edit-note.screen.ts';
 
 describe('Delete Note', () => {
   before(async () => {
     const element = await driver.$(".//*[@text='Allow']");
-    await element.click();  
+    // await element.click();
     await AddNoteScreen.skipTutorial();
-    await AddNoteScreen.addAndSaveNote("TV shows", "Friends\nBreakingBad\nPeakyBlinders");
+    await AddNoteScreen.addAndSaveNote(
+      'TV shows',
+      'Friends\nBreakingBad\nPeakyBlinders'
+    );
     await driver.back();
   });
 

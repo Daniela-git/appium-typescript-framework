@@ -162,5 +162,5 @@ dist
 
 # End of https://www.toptal.com/developers/gitignore/api/node,visualstudiocode
 
-./allure.report
-./allure-results
+allure-report/
+allure-results/
