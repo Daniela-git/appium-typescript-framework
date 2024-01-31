@@ -8,7 +8,7 @@ export const config: Options.Testrunner = {
   path: '/wd/hub',
   specs: [
     // '../test/specs/android/**/*.ts'
-    '../test/specs/android/delete-note-screenObjects.spec.ts',
+    '../test/specs/android/create-note.spec.ts',
   ],
   services: [],
   capabilities: [

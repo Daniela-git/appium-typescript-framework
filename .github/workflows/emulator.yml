@@ -33,6 +33,6 @@ jobs:
         with:
           script: npm run wdio:android
           avd-name: emulator
-          api-level: 29
+          api-level: 33
           arch: x86_64
-          profile: Nexus 6
+          target: google_apis
