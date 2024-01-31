@@ -1,6 +1,8 @@
 name: emulators
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
 
 jobs:
   Run_test:
@@ -31,6 +33,6 @@ jobs:
         with:
           script: npm run wdio:android
           avd-name: emulator
-          api-level: 33
+          api-level: 29
           arch: x86_64
           profile: Nexus 6
