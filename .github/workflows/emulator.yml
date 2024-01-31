@@ -12,7 +12,7 @@ jobs:
         run: |
           npm install -g appium
           appium -v
-          appium driver install uiautomator2
+          appium driver doctor uiautomator2
       - name: Install packages repo
         run: npm install
       - name: list
@@ -25,6 +25,9 @@ jobs:
           nohup appium server \
             --port=4723 \
             --base-path=/wd/hub \
+            --relaxed-security \
+            --log-no-colors \
+            --log-timestamp \
             2>&1 > "$cwd/appium.log" &
           popd
       - name: Run tests
@@ -33,7 +36,8 @@ jobs:
           script: npm run wdio:android
           avd-name: emulator
           sdcard-path-or-size: 1500M
-          api-level: 33
+          api-level: 30
           ram-size: 4096M
           heap-size: 1024M
-          arch: x86_64
+          arch: x86
+          emuTag: google_apis

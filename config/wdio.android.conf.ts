@@ -16,7 +16,7 @@ export const config: Options.Testrunner = {
       'appium:platformName': 'Android',
       'appium:platformVersion': '13.0',
       'appium:deviceName': 'emulator',
-      'appium:automationName': 'UIAutomator2',
+      'appium:automationName': 'UiAutomator2',
       // 'appium:app': path.join(process.cwd(), './app/android/ApiDemos-debug.apk')
       'appium:app': path.join(
         process.cwd(),
