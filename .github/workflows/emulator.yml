@@ -12,7 +12,6 @@ jobs:
         run: |
           npm install -g appium
           appium -v
-          appium driver doctor uiautomator2
       - name: Install packages repo
         run: npm install
       - name: list
@@ -22,6 +21,8 @@ jobs:
           cwd=$(pwd)
           pushd "$cwd"
           cd ~
+          appium driver install --source=local "$cwd"
+          appium driver doctor uiautomator2
           nohup appium server \
             --port=4723 \
             --base-path=/wd/hub \
