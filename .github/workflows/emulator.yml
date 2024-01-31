@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  Run_test:
     runs-on: macos-latest
     steps:
       - name: Checkout main repository
@@ -31,8 +31,6 @@ jobs:
         with:
           script: npm run wdio:android
           avd-name: emulator
-          sdcard-path-or-size: 1500M
           api-level: 33
-          ram-size: 4096M
-          heap-size: 1024M
           arch: x86_64
+          profile: Nexus 6
