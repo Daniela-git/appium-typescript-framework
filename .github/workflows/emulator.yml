@@ -33,7 +33,7 @@ jobs:
         with:
           script: npm run wdio:android
           avd-name: emulator
-          api-level: 30
+          api-level: 33
           arch: x86_64
           target: google_apis
           sdcard-path-or-size: 1500M

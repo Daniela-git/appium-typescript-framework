@@ -14,7 +14,7 @@ export const config: Options.Testrunner = {
   capabilities: [
     {
       'appium:platformName': 'Android',
-      'appium:platformVersion': '11.0',
+      'appium:platformVersion': '13.0',
       'appium:deviceName': 'emulator',
       'appium:automationName': 'UiAutomator2',
       'appium:app': path.join(
